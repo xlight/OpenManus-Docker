@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  openmanus:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: openmanus
+    volumes:
+      # 挂载配置文件目录，以便在主机上编辑 config.toml
+      - ./config:/app/config
+    environment:
+      # 可选：通过环境变量设置 API 密钥（优先级低于 config.toml）
+      - LLM_API_KEY=sk-... # 替换为真实的 API 密钥
+      - LLM_MODEL=gpt-4o
+      - LLM_BASE_URL=https://api.openai.com/v1
+      - LLM_MAX_TOKENS=4096
+      - LLM_TEMPERATURE=0.0
+    tty: true # 保持终端交互
+    stdin_open: true # 允许输入
+    command: ["python", "main.py"] # 默认运行 main.py
+    # 若需要运行开发版本，可改为：
+    # command: ["python", "run_flow.py"]
