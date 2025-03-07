@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: openmanus
     volumes:
-      # 挂载配置文件目录，以便在主机上编辑 config.toml
+      # 挂载 config 目录，以便在主机上编辑 config.toml
       - ./config:/app/config
     environment:
       # 可选：通过环境变量设置 API 密钥（优先级低于 config.toml）

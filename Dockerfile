@@ -9,21 +9,14 @@ RUN apt-get update && apt-get install -y \
     git \
     && rm -r /var/lib/apt/lists/*
 
-# 克隆 OpenManus 仓库
+# 克隆 OpenManus 仓库（包含 requirements.txt 和 config/config.example.toml）
 RUN git clone https://github.com/mannaandpoem/OpenManus.git .
 
 # 安装 Python 依赖
-COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 复制配置文件模板
-COPY config/config.example.toml config/config.toml
-
-# 设置环境变量（可选，API 密钥等可在运行时通过 docker-compose 或环境变量传入）
-# ENV API_KEY="sk-..."
-
-# 暴露可能的端口（如果将来有 Web 接口需求，默认无端口暴露）
-# EXPOSE 8080
+# 创建 config 目录并复制示例配置文件（如果需要覆盖，可通过 volume 挂载）
+RUN mkdir -p config && cp config.example.toml config/config.toml
 
 # 启动命令
 CMD ["python", "main.py"]
